@@ -94,4 +94,4 @@ ORDER BY avg_salary DESC;
 SELECT d.department_name, e.job_id, MIN(e.salary) AS min_salary
 FROM employees e
          JOIN departments d ON e.department_id = d.department_id
-GROUP BY e.job_id, e.department_id;
+GROUP BY e.job_id, e.department_id，d.department_name;
