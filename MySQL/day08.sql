@@ -184,27 +184,20 @@ CREATE PROCEDURE update_salary(
     IN change_sal_count INT
 )
 BEGIN
-    #声明变量
     DECLARE emp_id INT;
     DECLARE emp_salary DECIMAL(10,2);
     DECLARE emp_hire_date DATE;
     DECLARE counter INT DEFAULT 0;
     DECLARE done INT DEFAULT FALSE;
-
-    #声明游标
     DECLARE emp_cursor CURSOR FOR
         SELECT employee_id, salary, hire_date
         FROM employees
         WHERE department_id = dept_id
         ORDER BY salary ASC;
 
-    #声明结束处理程序
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-    #打开游标
     OPEN emp_cursor;
 
-    #循环读取游标数据
     read_loop: LOOP
         FETCH emp_cursor INTO emp_id, emp_salary, emp_hire_date;
 
@@ -212,7 +205,6 @@ BEGIN
             LEAVE read_loop;
         END IF;
 
-        #根据hire_date调整薪资
         IF emp_hire_date < '2005-01-01' THEN
             UPDATE employees SET salary = salary * 1.1 WHERE employee_id = emp_id;
         ELSE
@@ -221,11 +213,8 @@ BEGIN
 
         SET counter = counter + 1;
     END LOOP;
-
-    #关闭游标
     CLOSE emp_cursor;
 END //
 DELIMITER ;
 
-#调用示例
 CALL update_salary(50, 3);
